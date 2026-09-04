@@ -1,0 +1,26 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
+# Local tooling state
+.agents/
+.corecoder/cron_jobs.json
+.corecoder/knowledge/
+.corecoder/mcp_servers.json
+.corecoder/settings.json
+.corecoder/*.log
+.corecoder/chroma_db/
