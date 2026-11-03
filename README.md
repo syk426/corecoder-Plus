@@ -7,7 +7,7 @@ OpenLoop 是一个面向终端的 AI 编程助手，支持通过 OpenAI 兼容�
 读之前先让它在你的机器上活一次，后面所有代码你才有体感。
 
 ```bash
-git clone https://github.com/syk426/corecoder-Plus OpenLoop
+git clone https://github.com/syk426/OpenLoop
 cd OpenLoop
 pip install -e .
 ```
