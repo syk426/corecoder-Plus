@@ -2,28 +2,41 @@
 
 OpenLoop 是一个面向终端的 AI 编程助手，支持通过 OpenAI 兼容接口调用大语言模型，并提供文件读写、代码搜索、Shell 命令、会话管理、Skills、Hooks、MCP、知识库和定时任务等能力。
 
-## 安装与启动
+## 五分钟先把它跑起来
 
-在已有的 Conda `agent` 环境中安装本项目：
+读之前先让它在你的机器上活一次，后面所有代码你才有体感。
 
 ```bash
-conda activate agent
-cd /path/to/OpenLoop
-python -m pip install -e .
+git clone https://github.com/syk426/corecoder-Plus OpenLoop
+cd OpenLoop
+pip install -e .
+```
+
+然后给它一个模型和 key。OpenLoop 默认走 OpenAI 兼容接口，所以你手上任何一家的 key 都能用，换 provider 只是换两个环境变量：
+
+```bash
+# OpenAI
+export OPENLOOP_API_KEY=sk-...
+
+# 或者 DeepSeek，便宜很多，改一个 base_url 就行
+export OPENLOOP_API_KEY=sk-... OPENLOOP_BASE_URL=https://api.deepseek.com OPENLOOP_MODEL=deepseek-chat
+
+# 或者本地 Ollama，一分钱不花
+export OPENLOOP_API_KEY=ollama OPENLOOP_BASE_URL=http://localhost:11434/v1 OPENLOOP_MODEL=qwen2.5-coder
+```
+
+跑起来：
+
+```bash
 openloop
 ```
 
-可以使用 `openloop --version` 查看版本、`openloop --help` 查看参数，
-也可以使用 `python -m openloop` 启动。
-可编辑安装会记录源码的绝对路径；以后移动项目后，需要在新目录重新运行
-`python -m pip install -e .`。
+也可以使用 `openloop --version` 查看版本、`openloop --help` 查看参数，
+或使用 `python -m openloop` 启动。
 
-项目配置从当前工作目录的 `.env` 加载；模型相关变量使用 `OPENLOOP_MODEL`、
-`OPENLOOP_API_KEY`、`OPENLOOP_BASE_URL`、`OPENLOOP_MAX_TOKENS`、
-`OPENLOOP_MAX_CONTEXT`、`OPENLOOP_TEMPERATURE` 和 `OPENLOOP_PROVIDER`。
-也支持原有的 `OPENAI_API_KEY`、`OPENAI_BASE_URL` 和 `DEEPSEEK_API_KEY`。
-本地状态目录为 `.openloop/`，全局会话位于 `~/.openloop/sessions/`，
-命令历史保存在 `~/.openloop_history`。
+项目配置从当前工作目录的 `.env` 加载；也支持原有的 `OPENAI_API_KEY`、
+`OPENAI_BASE_URL` 和 `DEEPSEEK_API_KEY`。本地状态目录为 `.openloop/`，
+全局会话位于 `~/.openloop/sessions/`，命令历史保存在 `~/.openloop_history`。
 
 可选功能依赖可通过 `pip install -e '.[knowledge]'`、
 `pip install -e '.[mcp]'` 或 `pip install -e '.[litellm]'` 安装。
