@@ -965,8 +965,8 @@ sandbox_list_files(sandbox_id=id, remote_dir="/work/data")
 # >>   [FILE] user.json (size: 29 bytes)'
 
 # 4. 执行业务或绘图计算，且最后以穿透下载直接落本地电脑
-sandbox_read(sandbox_id=id, remote_path="/work/data/user.json", local_save_path="/Users/syk/Desktop/exported_user.json")
-# >> 'File successfully extracted from sandbox (/work/data/user.json) to local disk at: /Users/syk/Desktop/exported_user.json'
+sandbox_read(sandbox_id=id, remote_path="/work/data/user.json", local_save_path="/path/to/exported_user.json")
+# >> 'File successfully extracted from sandbox (/work/data/user.json) to local disk at: /path/to/exported_user.json'
 
 # 5. 省命爱器，阅尽立焚，瞬间还回全算力！
 sandbox_kill(sandbox_id=id)
@@ -1032,4 +1032,3 @@ Successfully terminated 2 active sandbox container(s).
 - **Skill 加载**：<10ms（目录扫描），<1ms（按需加载）
 - **上下文压缩**：三层渐进式（机械截断 → LLM 摘要 → 硬折叠）
 - **沙箱隔离调配**：本地原生极速起爆，零僵尸计算耗光保障
-

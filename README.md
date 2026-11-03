@@ -8,7 +8,7 @@ OpenLoop 是一个面向终端的 AI 编程助手，支持通过 OpenAI 兼容�
 
 ```bash
 conda activate agent
-cd /Users/syk/project/OpenLoop
+cd /path/to/OpenLoop
 python -m pip install -e .
 openloop
 ```
