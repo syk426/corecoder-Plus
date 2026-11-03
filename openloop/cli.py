@@ -30,10 +30,10 @@ console = Console()
 
 def _parse_args():
     p = argparse.ArgumentParser(
-        prog="corecoder",
+        prog="openloop",
         description="Minimal AI coding agent. Works with any OpenAI-compatible LLM.",
     )
-    p.add_argument("-m", "--model", help="Model name (default: $CORECODER_MODEL or gpt-5.5)")
+    p.add_argument("-m", "--model", help="Model name (default: $OPENLOOP_MODEL or gpt-5.5)")
     p.add_argument("--base-url", help="API base URL (default: $OPENAI_BASE_URL)")
     p.add_argument("--api-key", help="API key (default: $OPENAI_API_KEY)")
     p.add_argument("-p", "--prompt", help="One-shot prompt (non-interactive mode)")
@@ -57,7 +57,7 @@ def main():
     if not config.api_key:
         console.print("[red bold]No API key found.[/]")
         console.print(
-            "Set one of: OPENAI_API_KEY, DEEPSEEK_API_KEY, or CORECODER_API_KEY\n"
+            "Set one of: OPENAI_API_KEY, DEEPSEEK_API_KEY, or OPENLOOP_API_KEY\n"
             "\nExamples:\n"
             "  # OpenAI\n"
             "  export OPENAI_API_KEY=sk-...\n"
@@ -66,7 +66,7 @@ def main():
             "  export OPENAI_API_KEY=sk-... OPENAI_BASE_URL=https://api.deepseek.com\n"
             "\n"
             "  # Ollama (local)\n"
-            "  export OPENAI_API_KEY=ollama OPENAI_BASE_URL=http://localhost:11434/v1 CORECODER_MODEL=qwen2.5-coder\n"
+            "  export OPENAI_API_KEY=ollama OPENAI_BASE_URL=http://localhost:11434/v1 OPENLOOP_MODEL=qwen2.5-coder\n"
         )
         sys.exit(1)
 
@@ -101,7 +101,7 @@ def main():
             console.print(f"[dim]{result}[/dim]")
 
     # Initialize cron scheduler
-    cron_storage = Path(".corecoder") / "cron_jobs.json"
+    cron_storage = Path(".openloop") / "cron_jobs.json"
     cron_scheduler = CronScheduler(cron_storage)
 
     def _on_cron_fire(job):
@@ -113,14 +113,14 @@ def main():
 
     # Initialize knowledge base
     knowledge_dir = get_knowledge_dir()
-    chroma_dir = Path(".corecoder") / "chroma_db"
+    chroma_dir = Path(".openloop") / "chroma_db"
     knowledge_manager = KnowledgeManager(knowledge_dir, chroma_dir)
     try:
         result = knowledge_manager.scan()
         if "Indexed" in result:
             console.print(f"[dim]{result}[/dim]")
     except Exception as e:
-        console.print(f"[dim]Knowledge base: {e} (install with: pip install corecoder[knowledge])[/dim]")
+        console.print(f"[dim]Knowledge base: {e} (install with: pip install openloop[knowledge])[/dim]")
 
     agent = Agent(
         llm=llm,
@@ -220,7 +220,7 @@ def _run_once(agent: Agent, prompt: str, agent_lock: threading.Lock):
 def _repl(agent: Agent, config: Config, agent_lock: threading.Lock):
     """Interactive read-eval-print loop."""
     console.print(Panel(
-        f"[bold]CoreCoder[/bold] v{__version__}\n"
+        f"[bold]OpenLoop[/bold] v{__version__}\n"
         f"Model: [cyan]{config.model}[/cyan]"
         + (f"  Base: [dim]{config.base_url}[/dim]" if config.base_url else "")
         + "\nType [bold]/help[/bold] for commands, [bold]Ctrl+C[/bold] to cancel, [bold]quit[/bold] to exit."
@@ -228,7 +228,7 @@ def _repl(agent: Agent, config: Config, agent_lock: threading.Lock):
         border_style="blue",
     ))
 
-    hist_path = os.path.expanduser("~/.corecoder_history")
+    hist_path = os.path.expanduser("~/.openloop_history")
     history = FileHistory(hist_path)
 
     plan_mode = False  # mutable, captured by key binding closure
@@ -356,7 +356,7 @@ def _repl(agent: Agent, config: Config, agent_lock: threading.Lock):
         if user_input == "/save":
             sid = save_session(agent.messages, config.model)
             console.print(f"[green]Session saved: {sid}[/green]")
-            console.print(f"Resume with: corecoder -r {sid}")
+            console.print(f"Resume with: openloop -r {sid}")
             continue
         if user_input == "/diff":
             from .tools.edit import _changed_files
@@ -445,13 +445,13 @@ def _show_help():
         "  /knowledge     Manage knowledge base (list/search)\n"
         "  /sandbox       Manage OpenSandbox instances (list/kill)\n"
         "  /plan          Toggle Plan Mode (read-only tools)\n"
-        "  quit           Exit CoreCoder\n"
+        "  quit           Exit OpenLoop\n"
         "\n"
         "[bold]Input:[/bold]\n"
         "  Enter          Submit message\n"
         "  Shift+Tab      Toggle Plan Mode\n"
         "  Esc+Enter      Insert newline (for pasting code)",
-        title="CoreCoder Help",
+        title="OpenLoop Help",
         border_style="dim",
     ))
 
@@ -502,7 +502,7 @@ def _handle_mcp_command(mcp_manager: MCPClientManager, command: str):
         servers = mcp_manager.list_servers()
         if not servers:
             console.print("[dim]No MCP servers connected.[/dim]")
-            console.print("[dim]Configure servers in .corecoder/mcp_servers.json[/dim]")
+            console.print("[dim]Configure servers in .openloop/mcp_servers.json[/dim]")
             return
 
         console.print(f"\n[bold]Connected MCP Servers[/bold] ({len(servers)} servers)\n")
@@ -599,7 +599,7 @@ def _handle_knowledge_command(km, command: str):
     """Handle /knowledge commands."""
     if km is None:
         console.print("[dim]Knowledge base not available.[/dim]")
-        console.print("[dim]Install with: pip install corecoder[knowledge][/dim]")
+        console.print("[dim]Install with: pip install openloop[knowledge][/dim]")
         return
 
     parts = command.split()

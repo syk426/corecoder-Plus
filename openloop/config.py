@@ -42,19 +42,19 @@ class Config:
         _load_dotenv()
         # pick up common env vars automatically
         api_key = (
-            os.getenv("CORECODER_API_KEY")
+            os.getenv("OPENLOOP_API_KEY")
             or os.getenv("OPENAI_API_KEY")
             or os.getenv("DEEPSEEK_API_KEY")
             or ""
         )
         return cls(
-            model=os.getenv("CORECODER_MODEL", "gpt-5.5"),
+            model=os.getenv("OPENLOOP_MODEL", "gpt-5.5"),
             api_key=api_key,
-            base_url=os.getenv("OPENAI_BASE_URL") or os.getenv("CORECODER_BASE_URL"),
-            max_tokens=int(os.getenv("CORECODER_MAX_TOKENS", "4096")),
-            temperature=float(os.getenv("CORECODER_TEMPERATURE", "0")),
-            max_context_tokens=int(os.getenv("CORECODER_MAX_CONTEXT", "128000")),
-            provider=os.getenv("CORECODER_PROVIDER", "openai"),
+            base_url=os.getenv("OPENAI_BASE_URL") or os.getenv("OPENLOOP_BASE_URL"),
+            max_tokens=int(os.getenv("OPENLOOP_MAX_TOKENS", "4096")),
+            temperature=float(os.getenv("OPENLOOP_TEMPERATURE", "0")),
+            max_context_tokens=int(os.getenv("OPENLOOP_MAX_CONTEXT", "128000")),
+            provider=os.getenv("OPENLOOP_PROVIDER", "openai"),
         )
 
 
@@ -63,16 +63,16 @@ class Config:
 # ═══════════════════════════════════════════════════════════
 
 SETTINGS_PATHS = [
-    Path.home() / ".config" / "corecoder" / "settings.json",   # XDG-style global
-    Path.home() / ".corecoder" / "settings.json",               # simple global
-    Path(".corecoder") / "settings.json",                       # project-local
+    Path.home() / ".config" / "openloop" / "settings.json",   # XDG-style global
+    Path.home() / ".openloop" / "settings.json",               # simple global
+    Path(".openloop") / "settings.json",                       # project-local
 ]
 
 
 def load_settings() -> dict:
     """Load the first settings.json found from the search paths.
 
-    Search order: ~/.config/corecoder/ → ~/.corecoder/ → .corecoder/ (cwd).
+    Search order: ~/.config/openloop/ → ~/.openloop/ → .openloop/ (cwd).
     Returns empty dict if no settings file exists.
     """
     for path in SETTINGS_PATHS:
@@ -90,8 +90,8 @@ def load_settings() -> dict:
 
 SKILLS_DIRS = [
     Path("skills"),                       # project-local root (highest priority, most visible)
-    Path(".corecoder") / "skills",        # project-local hidden
-    Path.home() / ".corecoder" / "skills",  # global fallback
+    Path(".openloop") / "skills",        # project-local hidden
+    Path.home() / ".openloop" / "skills",  # global fallback
 ]
 
 
@@ -113,8 +113,8 @@ def get_skills_dir() -> Path:
 # ======================================================================
 
 KNOWLEDGE_DIRS = [
-    Path(".corecoder") / "knowledge",              # project-local
-    Path.home() / ".corecoder" / "knowledge",      # global fallback
+    Path(".openloop") / "knowledge",              # project-local
+    Path.home() / ".openloop" / "knowledge",      # global fallback
 ]
 
 
@@ -135,15 +135,15 @@ def get_knowledge_dir() -> Path:
 # ======================================================================
 
 MCP_CONFIG_PATHS = [
-    Path(".corecoder") / "mcp_servers.json",          # project-local
-    Path.home() / ".corecoder" / "mcp_servers.json",  # global fallback
+    Path(".openloop") / "mcp_servers.json",          # project-local
+    Path.home() / ".openloop" / "mcp_servers.json",  # global fallback
 ]
 
 
 def load_mcp_config() -> dict:
     """Load MCP servers configuration from mcp_servers.json.
 
-    Search order: .corecoder/ (cwd) → ~/.corecoder/ (home).
+    Search order: .openloop/ (cwd) → ~/.openloop/ (home).
     Returns empty dict if no config file exists.
 
     Expected format:

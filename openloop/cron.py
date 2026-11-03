@@ -4,7 +4,7 @@ Four-layer architecture adapted from Claude Code's cron system:
   1. Scheduler: daemon thread polls every 1s, fires matching jobs
   2. Queue: thread-safe queue decouples scheduler from consumer
   3. Consumer: Agent.chat() consumes queue at start of each turn
-  4. Durable storage: .corecoder/cron_jobs.json survives restart
+  4. Durable storage: .openloop/cron_jobs.json survives restart
 """
 
 import json

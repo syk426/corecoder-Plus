@@ -18,9 +18,9 @@ venv/
 
 # Local tooling state
 .agents/
-.corecoder/cron_jobs.json
-.corecoder/knowledge/
-.corecoder/mcp_servers.json
-.corecoder/settings.json
-.corecoder/*.log
-.corecoder/chroma_db/
+.openloop/cron_jobs.json
+.openloop/knowledge/
+.openloop/mcp_servers.json
+.openloop/settings.json
+.openloop/*.log
+.openloop/chroma_db/

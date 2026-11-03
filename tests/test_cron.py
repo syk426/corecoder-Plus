@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from corecoder.cron import CronScheduler, CronJob
+from openloop.cron import CronScheduler, CronJob
 
 
 class TestCronJob:
@@ -248,7 +248,7 @@ class TestCronToolSchemas:
     """Verify cron tools have valid OpenAI function calling schemas."""
 
     def test_schedule_cron_schema(self):
-        from corecoder.tools.cron import ScheduleCronTool
+        from openloop.tools.cron import ScheduleCronTool
         tool = ScheduleCronTool(None)
         schema = tool.schema()
         assert schema["type"] == "function"
@@ -257,13 +257,13 @@ class TestCronToolSchemas:
         assert "prompt" in schema["function"]["parameters"]["properties"]
 
     def test_list_crons_schema(self):
-        from corecoder.tools.cron import ListCronsTool
+        from openloop.tools.cron import ListCronsTool
         tool = ListCronsTool(None)
         schema = tool.schema()
         assert schema["function"]["name"] == "list_crons"
 
     def test_cancel_cron_schema(self):
-        from corecoder.tools.cron import CancelCronTool
+        from openloop.tools.cron import CancelCronTool
         tool = CancelCronTool(None)
         schema = tool.schema()
         assert schema["function"]["name"] == "cancel_cron"

@@ -7,7 +7,7 @@ import threading
 
 import pytest
 
-from corecoder.hooks import (
+from openloop.hooks import (
     HookManager,
     ShellHook,
     VALID_EVENTS,

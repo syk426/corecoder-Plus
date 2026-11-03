@@ -38,7 +38,7 @@ class KnowledgeManager:
         model load + rebuild.
         """
         if not self.knowledge_dir.exists():
-            return "Knowledge directory not found. Create .corecoder/knowledge/ and add .md files."
+            return "Knowledge directory not found. Create .openloop/knowledge/ and add .md files."
 
         files = sorted(self.knowledge_dir.glob("*.md"))
         if not files:

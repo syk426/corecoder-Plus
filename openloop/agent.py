@@ -1,6 +1,6 @@
 """Core agent loop.
 
-This is the heart of CoreCoder.  The pattern is simple:
+This is the heart of OpenLoop.  The pattern is simple:
 
     user message -> LLM (with tools) -> tool calls? -> execute -> loop
                                       -> text reply? -> return to user
@@ -357,7 +357,7 @@ class Agent:
 
         # Generate plan file path
         slug = self._slugify(task) if task else f"plan-{int(time.time())}"
-        plan_dir = Path(os.getcwd()) / ".corecoder" / "plans"
+        plan_dir = Path(os.getcwd()) / ".openloop" / "plans"
         self._plan_file = str(plan_dir / f"{slug}.md")
 
         self.mode = "plan"

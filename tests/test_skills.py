@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import shutil
 
-from corecoder.skills import SkillManager
+from openloop.skills import SkillManager
 
 
 @pytest.fixture

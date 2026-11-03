@@ -54,20 +54,20 @@ class TestKnowledgeManager:
 
     def test_init(self, temp_knowledge_dir):
         kdir, persist = temp_knowledge_dir
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         km = KnowledgeManager(kdir, persist)
         assert km.knowledge_dir == kdir
 
     def test_scan_empty(self, temp_knowledge_dir):
         kdir, persist = temp_knowledge_dir
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         km = KnowledgeManager(kdir, persist)
         result = km.scan()
         assert "No knowledge files" in result
 
     def test_scan_with_files(self, sample_knowledge_files):
         kdir, persist = sample_knowledge_files
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         km = KnowledgeManager(kdir, persist)
         result = km.scan()
         assert "Indexed" in result
@@ -75,14 +75,14 @@ class TestKnowledgeManager:
 
     def test_list_entries_empty(self, temp_knowledge_dir):
         kdir, persist = temp_knowledge_dir
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         km = KnowledgeManager(kdir, persist)
         result = km.list_entries()
         assert "empty" in result
 
     def test_list_entries(self, sample_knowledge_files):
         kdir, persist = sample_knowledge_files
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         km = KnowledgeManager(kdir, persist)
         km.scan()
         result = km.list_entries()
@@ -91,7 +91,7 @@ class TestKnowledgeManager:
 
     def test_search_semantic(self, sample_knowledge_files):
         kdir, persist = sample_knowledge_files
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         km = KnowledgeManager(kdir, persist)
         km.scan()
         result = km.search("How do I create a function?")
@@ -99,7 +99,7 @@ class TestKnowledgeManager:
 
     def test_search_no_results(self, sample_knowledge_files):
         kdir, persist = sample_knowledge_files
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         km = KnowledgeManager(kdir, persist)
         km.scan()
         result = km.search("rocket science quantum physics")
@@ -108,7 +108,7 @@ class TestKnowledgeManager:
 
     def test_add_entry(self, sample_knowledge_files):
         kdir, persist = sample_knowledge_files
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         km = KnowledgeManager(kdir, persist)
         km.scan()
         result = km.add("Docker Guide", "## Containers\nDocker containers are lightweight.")
@@ -120,7 +120,7 @@ class TestKnowledgeManager:
         assert "Docker" in result
 
     def test_chunk_text(self):
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         text = "## Section 1\n" + "x" * 200 + "\n\n## Section 2\n" + "y" * 200
         chunks = KnowledgeManager._chunk_text(text)
         assert len(chunks) == 2
@@ -128,21 +128,21 @@ class TestKnowledgeManager:
         assert "Section 2" in chunks[1]
 
     def test_chunk_merges_small(self):
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         text = "## Big Section\n" + "x" * 200 + "\n\n## Tiny\nhi"
         chunks = KnowledgeManager._chunk_text(text)
         # Tiny section should merge into Big Section
         assert len(chunks) == 1
 
     def test_parse_frontmatter(self):
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         text = "---\ntitle: Test\n---\n\n# Body"
         meta, body = KnowledgeManager._parse_frontmatter(text)
         assert meta["title"] == "Test"
         assert "# Body" in body
 
     def test_parse_frontmatter_none(self):
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         text = "# Just a heading"
         meta, body = KnowledgeManager._parse_frontmatter(text)
         assert meta == {}
@@ -150,7 +150,7 @@ class TestKnowledgeManager:
 
     def test_persistence(self, sample_knowledge_files):
         kdir, persist = sample_knowledge_files
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
 
         km1 = KnowledgeManager(kdir, persist)
         km1.scan()
@@ -165,14 +165,14 @@ class TestKnowledgeToolSchemas:
     """Verify knowledge tools have valid OpenAI schemas."""
 
     def test_search_knowledge_schema(self):
-        from corecoder.tools.knowledge import SearchKnowledgeTool
+        from openloop.tools.knowledge import SearchKnowledgeTool
         tool = SearchKnowledgeTool(None)
         schema = tool.schema()
         assert schema["function"]["name"] == "search_knowledge"
         assert "query" in schema["function"]["parameters"]["properties"]
 
     def test_add_knowledge_schema(self):
-        from corecoder.tools.knowledge import AddKnowledgeTool
+        from openloop.tools.knowledge import AddKnowledgeTool
         tool = AddKnowledgeTool(None)
         schema = tool.schema()
         assert schema["function"]["name"] == "add_knowledge"
@@ -180,7 +180,7 @@ class TestKnowledgeToolSchemas:
         assert "content" in schema["function"]["parameters"]["properties"]
 
     def test_ingest_schema(self):
-        from corecoder.tools.knowledge import IngestTool
+        from openloop.tools.knowledge import IngestTool
         tool = IngestTool(None)
         schema = tool.schema()
         assert schema["function"]["name"] == "ingest"
@@ -192,14 +192,14 @@ class TestFileIngestion:
 
     def test_ingest_not_found(self, temp_knowledge_dir):
         kdir, persist = temp_knowledge_dir
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         km = KnowledgeManager(kdir, persist)
         result = km.ingest("/nonexistent/file.pdf")
         assert "not found" in result
 
     def test_ingest_unsupported(self, temp_knowledge_dir):
         kdir, persist = temp_knowledge_dir
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         km = KnowledgeManager(kdir, persist)
         result = km.ingest(__file__)
         assert "unsupported" in result.lower()
@@ -215,7 +215,7 @@ class TestFileIngestion:
         doc.save(str(pdf_path))
         doc.close()
 
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         km = KnowledgeManager(kdir, persist)
         km.scan()
         result = km.ingest(str(pdf_path))
@@ -226,7 +226,7 @@ class TestFileIngestion:
         txt_path = kdir / "notes.txt"
         txt_path.write_text("## Notes\nThis is text content.")
 
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         km = KnowledgeManager(kdir, persist)
         km.scan()
         result = km.ingest(str(txt_path))
@@ -237,7 +237,7 @@ class TestFileIngestion:
         csv_path = kdir / "data.csv"
         csv_path.write_text("name,age\nAlice,30\nBob,25")
 
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         km = KnowledgeManager(kdir, persist)
         km.scan()
         result = km.ingest(str(csv_path))
@@ -254,7 +254,7 @@ class TestFileIngestion:
         xlsx_path = kdir / "data.xlsx"
         wb.save(str(xlsx_path))
 
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         km = KnowledgeManager(kdir, persist)
         km.scan()
         result = km.ingest(str(xlsx_path))
@@ -265,7 +265,7 @@ class TestFileIngestion:
         html_path = kdir / "page.html"
         html_path.write_text("<h1>Title</h1><p>Some text here.</p>")
 
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         km = KnowledgeManager(kdir, persist)
         km.scan()
         result = km.ingest(str(html_path))
@@ -276,7 +276,7 @@ class TestFileIngestion:
         md_path = kdir / "readme.md"
         md_path.write_text("## Readme\nThis is a readme file.")
 
-        from corecoder.knowledge import KnowledgeManager
+        from openloop.knowledge import KnowledgeManager
         km = KnowledgeManager(kdir, persist)
         km.scan()
         result = km.ingest(str(md_path))

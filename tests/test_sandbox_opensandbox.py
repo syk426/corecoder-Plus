@@ -3,8 +3,8 @@
 import time
 from unittest.mock import MagicMock
 
-from corecoder.tools import get_tool
-from corecoder.tools.sandbox import (
+from openloop.tools import get_tool
+from openloop.tools.sandbox import (
     ACTIVE_SANDBOXES,
     CreateSandboxTool,
     SandboxDownloadFileTool,
@@ -169,7 +169,7 @@ def test_sandbox_create_passes_timeout_to_sdk(monkeypatch):
     import sys
     from types import ModuleType
 
-    from corecoder.tools import sandbox as sb_mod
+    from openloop.tools import sandbox as sb_mod
 
     # Fake a not-installed opensandbox package so the import guard passes.
     fake = ModuleType("opensandbox")
@@ -207,7 +207,7 @@ def test_create_sandbox_instance_timeout_typeerror_fallback(monkeypatch):
     import sys
     from types import ModuleType
 
-    from corecoder.tools import sandbox as sb_mod
+    from openloop.tools import sandbox as sb_mod
 
     calls = []
 
@@ -235,7 +235,7 @@ def test_get_sandbox_reconnect_preserves_ttl(monkeypatch):
     import sys
     from types import ModuleType
 
-    from corecoder.tools import sandbox as sb_mod
+    from openloop.tools import sandbox as sb_mod
 
     mock_sbx = MagicMock()
     FakeSandboxSync = type("SandboxSync", (), {"connect": staticmethod(lambda *a, **k: mock_sbx)})
@@ -264,7 +264,7 @@ def test_sandbox_create_retries_on_transient_failure(monkeypatch):
     import sys
     from types import ModuleType
 
-    from corecoder.tools import sandbox as sb_mod
+    from openloop.tools import sandbox as sb_mod
 
     fake = ModuleType("opensandbox")
     fake.SandboxSync = type("SandboxSync", (), {"create": staticmethod(lambda **kw: None)})
@@ -298,7 +298,7 @@ def test_sandbox_create_reports_failure_after_all_retries(monkeypatch):
     import sys
     from types import ModuleType
 
-    from corecoder.tools import sandbox as sb_mod
+    from openloop.tools import sandbox as sb_mod
 
     fake = ModuleType("opensandbox")
     fake.SandboxSync = type("SandboxSync", (), {"create": staticmethod(lambda **kw: None)})
